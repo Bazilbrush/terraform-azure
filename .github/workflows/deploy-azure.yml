@@ -1,0 +1,89 @@
+name: GitHub Actions Demo
+run-name: ${{ github.actor }} is testing out GitHub Actions 
+on: 
+    workflow_dispatch:
+        inputs:
+            tfpath:
+                description: 'TF File Path'     
+                required: false
+                default: 'infra'
+            AWS_ACCESS_KEY:
+                description: 'AWS access key'
+                required: false
+                default: ''
+            AWS_SECRET_ACCESS_KEY:
+                description: 'AWS secret'
+                required: false
+                default: ''
+            AWS_REGION:
+                description: 'aws region'
+                required: false
+                default: 'eu-west-1'
+            # Azure vars
+            ARM_CLIENT_ID:
+                description: 'service principal id'
+                required: false
+                default: ''
+            ARM_CLIENT_SECRET:
+                description: 'service principal secret'
+                required: false
+                default: ''
+            ARM_SUBSCRIPTION_ID:
+                description: 'sub id'
+                required: false
+                default: ''
+            ARM_TENANT_ID:
+                description: 'tenant id'
+                required: false
+                default: ''
+jobs:
+    tf_code_check:
+        name: Terraform Validation and Build
+        runs-on: ubuntu-latest
+    
+        if:  ${{ inputs.tfpath }} 
+        steps:
+        - uses: actions/checkout@v2.5.0
+    
+        
+        - name: Configure AWS Credentials Action For GitHub Actions
+          if: ${{ inputs.AWS_ACCESS_KEY }}
+          uses: aws-actions/configure-aws-credentials@v1
+          with:
+            aws-access-key-id: ${{ inputs.AWS_ACCESS_KEY }}
+            aws-secret-access-key: ${{ inputs.AWS_SECRET_ACCESS_KEY }}
+            aws-region: ${{ inputs.AWS_REGION }} 
+        
+        - name: Configure Azure credentials
+          if: ${{ inputs.ARM_SUBSCRIPTION_ID }}
+          run: |
+            az login --service-principal --username ${{ inputs.ARM_CLIENT_ID }} --password ${{ inputs.ARM_CLIENT_SECRET }} --tenant ${{ inputs.ARM_TENANT_ID }}
+            az account set --subscription ${{ inputs.ARM_SUBSCRIPTION_ID }}
+
+        - name: Setup Terraform CLI
+          uses: hashicorp/setup-terraform@v2.0.2
+          with: 
+            terraform_version: 0.14.0  # yes we wanna hardcode this as we dont want people setting their own
+    
+        - name: Terraform init, plan and apply
+          run: |
+            echo `pwd`
+            echo "tfpath ${{ github.event.inputs.tfpath }}"
+            echo "** Running Terraform Init**"
+            terraform init -backend=false
+    
+            echo "** Running Terraform Validate**"
+            terraform validate
+    
+            echo "** Running Terraform Plan**"
+            terraform plan
+    
+    #        echo "** Running Terraform Apply**"
+    #        terraform apply -auto-approve
+          working-directory: ${{ github.event.inputs.tfpath }}
+    #     - name: Terraform Destroy
+    #       run: |
+    #         echo "** Running Terraform Destroy**"
+    #         terraform plan -destroy
+    # #        terraform destroy -auto-approve
+    #       working-directory: ${{ github.event.inputs.tfpath }}
