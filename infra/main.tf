@@ -20,10 +20,11 @@ terraform {
 
 }
 
+
 provider "azurerm" {
+  use_oidc = true
   features {}
 }
-
 resource "azurerm_resource_group" "state-demo-secure" {
   name     = "state-demo"
   location = "UK South"
