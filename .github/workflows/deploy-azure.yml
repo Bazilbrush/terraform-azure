@@ -7,35 +7,35 @@ on:
                 description: 'TF File Path'     
                 required: false
                 default: 'infra'
-            AWS_ACCESS_KEY:
-                description: 'AWS access key'
-                required: false
-                default: ''
-            AWS_SECRET_ACCESS_KEY:
-                description: 'AWS secret'
-                required: false
-                default: ''
-            AWS_REGION:
-                description: 'aws region'
-                required: false
-                default: 'eu-west-1'
-            # Azure vars
-            ARM_CLIENT_ID:
-                description: 'service principal id'
-                required: false
-                default: ''
-            ARM_CLIENT_SECRET:
-                description: 'service principal secret'
-                required: false
-                default: ''
-            ARM_SUBSCRIPTION_ID:
-                description: 'sub id'
-                required: false
-                default: ''
-            ARM_TENANT_ID:
-                description: 'tenant id'
-                required: false
-                default: ''
+            # AWS_ACCESS_KEY:
+            #     description: 'AWS access key'
+            #     required: false
+            #     default: ''
+            # AWS_SECRET_ACCESS_KEY:
+            #     description: 'AWS secret'
+            #     required: false
+            #     default: ''
+            # AWS_REGION:
+            #     description: 'aws region'
+            #     required: false
+            #     default: 'eu-west-1'
+            # # Azure vars
+            # ARM_CLIENT_ID:
+            #     description: 'service principal id'
+            #     required: false
+            #     default: ''
+            # ARM_CLIENT_SECRET:
+            #     description: 'service principal secret'
+            #     required: false
+            #     default: ''
+            # ARM_SUBSCRIPTION_ID:
+            #     description: 'sub id'
+            #     required: false
+            #     default: ''
+            # ARM_TENANT_ID:
+            #     description: 'tenant id'
+            #     required: false
+            #     default: ''
 jobs:
     tf_code_check:
         name: Terraform Validation and Build
@@ -55,10 +55,10 @@ jobs:
             aws-region: ${{ inputs.AWS_REGION }} 
         
         - name: Configure Azure credentials
-          if: ${{ inputs.ARM_SUBSCRIPTION_ID }}
+          if: ${{ secrets.ARM_SUBSCRIPTION_ID }}
           run: |
-            az login --service-principal --username ${{ inputs.ARM_CLIENT_ID }} --password ${{ inputs.ARM_CLIENT_SECRET }} --tenant ${{ inputs.ARM_TENANT_ID }}
-            az account set --subscription ${{ inputs.ARM_SUBSCRIPTION_ID }}
+            az login --service-principal --username ${{ secrets.ARM_CLIENT_ID }} --password ${{ secrets.ARM_CLIENT_SECRET }} --tenant ${{ secrets.ARM_TENANT_ID }}
+            az account set --subscription ${{ secrets.ARM_SUBSCRIPTION_ID }}
 
         - name: Setup Terraform CLI
           uses: hashicorp/setup-terraform@v2.0.2
