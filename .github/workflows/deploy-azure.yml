@@ -58,12 +58,12 @@ jobs:
             aws-secret-access-key: ${{ inputs.AWS_SECRET_ACCESS_KEY }}
             aws-region: ${{ inputs.AWS_REGION }} 
         
-        - name: Azure login
-          uses: azure/login@v1
-          with:
-            client-id: ${{ secrets.AZURE_CLIENT_ID }}
-            tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-            subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        # - name: Azure login
+        #   uses: azure/login@v1
+        #   with:
+        #     client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        #     tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        #     subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
         # - name: Configure Azure credentials
         # #   if: ${{ secrets.ARM_SUBSCRIPTION_ID }}
@@ -77,6 +77,11 @@ jobs:
             terraform_version: 0.14.0  # yes we wanna hardcode this as we dont want people setting their own
     
         - name: Terraform init, plan and apply
+          env:
+            ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+            ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+            ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+            ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
           run: |
             echo `pwd`
             echo "tfpath ${{ github.event.inputs.tfpath }}"
