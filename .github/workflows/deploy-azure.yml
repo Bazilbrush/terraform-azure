@@ -71,7 +71,7 @@ jobs:
             echo "tfpath ${{ github.event.inputs.tfpath }}"
             echo "** Running Terraform Init**"
             # terraform init -backend=false
-            terraform init
+            terraform init -backend-config="resource_group_name=backend" -backend-config="storage_account_name=backendthni7" -backend-config="container_name=backend" -backend-config="key=tests/integration/basic.tfstate"
     
             echo "** Running Terraform Validate**"
             terraform validate
