@@ -82,7 +82,23 @@ jobs:
             ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
             ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
         
-
+    terraform-plan-destroy:
+        uses: Bazilbrush/terraform-templates/.github/workflows/terraform-destroy-plan.yml@main
+        if: ${{ always() }}
+        needs: terraform-apply
+        with:
+            tfpath: infra
+            platform: azure
+            TF_ENV: integration
+            AZ_RG_NAME: backend
+            AZ_STORAGE_ACC: backendthni7
+            AZ_STORAGE_CONTAINER: backend
+            BACKEND_KEY: tests/integration/basic.tfstate
+        secrets:
+            ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+            ARM_CLIENT_SECRET:  ${{ secrets.ARM_CLIENT_SECRET }}
+            ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+            ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
 
     # terraform-apply:
     #     name: Terraform Validation and Build
@@ -104,34 +120,10 @@ jobs:
     #         aws-region: ${{ inputs.AWS_REGION }} 
         
        
-    #     - name: Setup Terraform CLI
-    #       uses: hashicorp/setup-terraform@v2.0.2
-    #       with: 
-    #         terraform_version: 0.14.0  # yes we wanna hardcode this as we dont want people setting their own
+    
             
 
-        # - name: Terraform  plan and apply
-        #   env:
-        #     ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-        #     ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-        #     ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-        #     ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-        #   run: |
-        #     echo `pwd`
-        #     echo "tfpath ${{ github.event.inputs.tfpath }}"
-        #     echo "** Running Terraform Init**"
-        #     # terraform init -backend=false
-        #     terraform init -backend-config="resource_group_name=backend" -backend-config="storage_account_name=backendthni7" -backend-config="container_name=backend" -backend-config="key=tests/integration/basic.tfstate"
-    
-        #     echo "** Running Terraform Validate**"
-        #     terraform validate
-    
-        #     echo "** Running Terraform Plan**"
-        #     terraform plan
-    
-        #     echo "** Running Terraform Apply**"
-        #     terraform apply -auto-approve
-        #   working-directory: ${{ github.event.inputs.tfpath }}
+
 
         # - name: Terraform Destroy
         #   env:
