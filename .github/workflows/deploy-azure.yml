@@ -63,33 +63,51 @@ jobs:
             ARM_CLIENT_SECRET:  ${{ secrets.ARM_CLIENT_SECRET }}
             ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
             ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-        
-
 
     terraform-apply:
-        name: Terraform Validation and Build
+        uses: Bazilbrush/terraform-templates/.github/workflows/terraform-apply.yml@main
         if: ${{ always() }}
         needs: terraform-plan
-        runs-on: ubuntu-latest
+        with:
+            tfpath: infra
+            platform: azure
+            TF_ENV: integration
+            AZ_RG_NAME: backend
+            AZ_STORAGE_ACC: backendthni7
+            AZ_STORAGE_CONTAINER: backend
+            BACKEND_KEY: tests/integration/basic.tfstate
+        secrets:
+            ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+            ARM_CLIENT_SECRET:  ${{ secrets.ARM_CLIENT_SECRET }}
+            ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+            ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+        
+
+
+    # terraform-apply:
+    #     name: Terraform Validation and Build
+    #     if: ${{ always() }}
+    #     needs: terraform-plan
+    #     runs-on: ubuntu-latest
     
-        # if:  ${{ inputs.tfpath }} 
-        steps:
-        - uses: actions/checkout@v2.5.0
+    #     # if:  ${{ inputs.tfpath }} 
+    #     steps:
+    #     - uses: actions/checkout@v2.5.0
     
         
-        - name: Configure AWS Credentials Action For GitHub Actions
-          if: ${{ inputs.AWS_ACCESS_KEY }}
-          uses: aws-actions/configure-aws-credentials@v1
-          with:
-            aws-access-key-id: ${{ inputs.AWS_ACCESS_KEY }}
-            aws-secret-access-key: ${{ inputs.AWS_SECRET_ACCESS_KEY }}
-            aws-region: ${{ inputs.AWS_REGION }} 
+    #     - name: Configure AWS Credentials Action For GitHub Actions
+    #       if: ${{ inputs.AWS_ACCESS_KEY }}
+    #       uses: aws-actions/configure-aws-credentials@v1
+    #       with:
+    #         aws-access-key-id: ${{ inputs.AWS_ACCESS_KEY }}
+    #         aws-secret-access-key: ${{ inputs.AWS_SECRET_ACCESS_KEY }}
+    #         aws-region: ${{ inputs.AWS_REGION }} 
         
        
-        - name: Setup Terraform CLI
-          uses: hashicorp/setup-terraform@v2.0.2
-          with: 
-            terraform_version: 0.14.0  # yes we wanna hardcode this as we dont want people setting their own
+    #     - name: Setup Terraform CLI
+    #       uses: hashicorp/setup-terraform@v2.0.2
+    #       with: 
+    #         terraform_version: 0.14.0  # yes we wanna hardcode this as we dont want people setting their own
             
 
         # - name: Terraform  plan and apply
