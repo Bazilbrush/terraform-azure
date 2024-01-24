@@ -53,6 +53,7 @@ jobs:
         with:
             tfpath: infra
             platform: azure
+            TF_ENV: integration
             AZ_RG_NAME: backend
             AZ_STORAGE_ACC: backendthni7
             AZ_STORAGE_CONTAINER: backend
