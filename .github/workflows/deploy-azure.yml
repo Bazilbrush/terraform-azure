@@ -95,12 +95,18 @@ jobs:
             echo "** Running Terraform Plan**"
             terraform plan
     
-    #        echo "** Running Terraform Apply**"
-    #        terraform apply -auto-approve
+            echo "** Running Terraform Apply**"
+            terraform apply -auto-approve
           working-directory: ${{ github.event.inputs.tfpath }}
-    #     - name: Terraform Destroy
-    #       run: |
-    #         echo "** Running Terraform Destroy**"
-    #         terraform plan -destroy
-    # #        terraform destroy -auto-approve
-    #       working-directory: ${{ github.event.inputs.tfpath }}
+
+        - name: Terraform Destroy
+          env:
+            ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+            ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+            ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+            ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          run: |
+            echo "** Running Terraform Destroy**"
+            terraform plan -destroy
+            terraform destroy -auto-approve
+          working-directory: ${{ github.event.inputs.tfpath }}
