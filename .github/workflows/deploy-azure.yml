@@ -67,11 +67,11 @@ jobs:
 
     terraform-apply:
         name: Terraform Validation and Build
-        # if: ${{ always() }}
+        if: ${{ always() }}
         needs: terraform-plan
         runs-on: ubuntu-latest
     
-        if:  ${{ inputs.tfpath }} 
+        # if:  ${{ inputs.tfpath }} 
         steps:
         - uses: actions/checkout@v2.5.0
     
