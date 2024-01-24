@@ -48,6 +48,7 @@ jobs:
     
     terraform-plan:
         uses: Bazilbrush/terraform-templates/.github/workflows/terraform-plan.yml@main
+        if: ${{ always() }}
         needs: terraform-validate
         with:
             tfpath: infra
@@ -66,6 +67,7 @@ jobs:
 
     terraform-apply:
         name: Terraform Validation and Build
+        # if: ${{ always() }}
         needs: terraform-plan
         runs-on: ubuntu-latest
     
