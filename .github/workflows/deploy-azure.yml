@@ -1,4 +1,4 @@
-name: terraform-validate
+name: Run terraform integration test
 run-name: ${{ github.actor }} is testing out GitHub Actions 
 on: 
     workflow_dispatch:
@@ -7,35 +7,7 @@ on:
                 description: 'TF File Path'     
                 required: false
                 default: 'infra'
-            # AWS_ACCESS_KEY:
-            #     description: 'AWS access key'
-            #     required: false
-            #     default: ''
-            # AWS_SECRET_ACCESS_KEY:
-            #     description: 'AWS secret'
-            #     required: false
-            #     default: ''
-            # AWS_REGION:
-            #     description: 'aws region'
-            #     required: false
-            #     default: 'eu-west-1'
-            # # Azure vars
-            # ARM_CLIENT_ID:
-            #     description: 'service principal id'
-            #     required: false
-            #     default: ''
-            # ARM_CLIENT_SECRET:
-            #     description: 'service principal secret'
-            #     required: false
-            #     default: ''
-            # ARM_SUBSCRIPTION_ID:
-            #     description: 'sub id'
-            #     required: false
-            #     default: ''
-            # ARM_TENANT_ID:
-            #     description: 'tenant id'
-            #     required: false
-            #     default: ''
+            
 permissions:
     id-token: write
     contents: read
@@ -119,39 +91,3 @@ jobs:
             ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
             ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
 
-    # terraform-apply:
-    #     name: Terraform Validation and Build
-    #     if: ${{ always() }}
-    #     needs: terraform-plan
-    #     runs-on: ubuntu-latest
-    
-    #     # if:  ${{ inputs.tfpath }} 
-    #     steps:
-    #     - uses: actions/checkout@v2.5.0
-    
-        
-    #     - name: Configure AWS Credentials Action For GitHub Actions
-    #       if: ${{ inputs.AWS_ACCESS_KEY }}
-    #       uses: aws-actions/configure-aws-credentials@v1
-    #       with:
-    #         aws-access-key-id: ${{ inputs.AWS_ACCESS_KEY }}
-    #         aws-secret-access-key: ${{ inputs.AWS_SECRET_ACCESS_KEY }}
-    #         aws-region: ${{ inputs.AWS_REGION }} 
-        
-       
-    
-            
-
-
-
-        # - name: Terraform Destroy
-        #   env:
-        #     ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-        #     ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-        #     ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-        #     ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-        #   run: |
-        #     echo "** Running Terraform Destroy**"
-        #     terraform plan -destroy
-        #     terraform destroy -auto-approve
-        #   working-directory: ${{ github.event.inputs.tfpath }}
