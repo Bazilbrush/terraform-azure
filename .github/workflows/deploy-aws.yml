@@ -18,24 +18,24 @@ jobs:
         with:
             tfpath: infra-aws
     
-    # terraform-plan:
-    #     uses: Bazilbrush/terraform-templates/.github/workflows/terraform-plan.yml@main
-    #     if: ${{ always() }}
-    #     needs: terraform-validate
-    #     with:
-    #         tfpath: infra-aws
-    #         platform: aws
-    #         TF_ENV: integration
-    #         AZ_RG_NAME: backend
-    #         AZ_STORAGE_ACC: backendthni7
-    #         AZ_STORAGE_CONTAINER: backend
-    #         BACKEND_KEY: tests/integration-aws/basic.tfstate
-    #     secrets:
-    #         ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-    #         ARM_CLIENT_SECRET:  ${{ secrets.ARM_CLIENT_SECRET }}
-    #         ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-    #         ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-    #         INFRACOST_API_KEY: ${{ secrets.INFRACOST_API_KEY }}
+    terraform-plan:
+        uses: Bazilbrush/terraform-templates/.github/workflows/terraform-plan.yml@main
+        if: ${{ always() }}
+        needs: terraform-validate
+        with:
+            tfpath: infra-aws
+            backend-platform: azure
+            TF_ENV: integration
+            AZ_RG_NAME: backend
+            AZ_STORAGE_ACC: backendthni7
+            AZ_STORAGE_CONTAINER: backend
+            BACKEND_KEY: tests/integration-aws/basic.tfstate
+        secrets:
+            ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+            ARM_CLIENT_SECRET:  ${{ secrets.ARM_CLIENT_SECRET }}
+            ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+            ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+            INFRACOST_API_KEY: ${{ secrets.INFRACOST_API_KEY }}
 
     # terraform-apply:
     #     uses: Bazilbrush/terraform-templates/.github/workflows/terraform-apply.yml@main

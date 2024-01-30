@@ -24,7 +24,7 @@ jobs:
         needs: terraform-validate
         with:
             tfpath: infra
-            platform: azure
+            backend-platform: azure
             TF_ENV: integration
             AZ_RG_NAME: backend
             AZ_STORAGE_ACC: backendthni7
@@ -43,7 +43,7 @@ jobs:
         needs: terraform-plan
         with:
             tfpath: infra
-            platform: azure
+            backend-platform: azure
             TF_ENV: integration
             AZ_RG_NAME: backend
             AZ_STORAGE_ACC: backendthni7
@@ -61,7 +61,7 @@ jobs:
         needs: terraform-apply
         with:
             tfpath: infra
-            platform: azure
+            backend-platform: azure
             TF_ENV: integration
             AZ_RG_NAME: backend
             AZ_STORAGE_ACC: backendthni7
@@ -79,7 +79,7 @@ jobs:
         needs: terraform-plan-destroy
         with:
             tfpath: infra
-            platform: azure
+            backend-platform: azure
             TF_ENV: integration
             AZ_RG_NAME: backend
             AZ_STORAGE_ACC: backendthni7
