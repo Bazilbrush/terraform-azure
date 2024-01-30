@@ -13,7 +13,7 @@ terraform {
       resource_group_name  = "backend"
       storage_account_name = "backendthni7"
       container_name       = "backend"
-      key                  = "templates/integration/basic.tfstate"
+      key                  = "tests/integration/basic.tfstate"
   }
 
 
