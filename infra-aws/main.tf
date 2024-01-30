@@ -22,6 +22,10 @@ terraform {
 
 }
 
+provider "azurerm" {
+  use_oidc = true
+  features {}
+}
 provider "aws" {
   region = "eu-west-1"
 }
