@@ -1,9 +1,9 @@
 terraform {
   required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~>3.0"
-    }
+    # azurerm = {
+    #   source  = "hashicorp/azurerm"
+    #   version = "~>3.0"
+    # }
     ansible = {
         source = "nbering/ansible"
         version = "1.0.4"
@@ -13,19 +13,18 @@ terraform {
       version = "~> 5.0"
     }
   }
-  backend "azurerm" {
-      resource_group_name  = "backend"
-      storage_account_name = "backendthni7"
-      container_name       = "backend"
-      key                  = "tests/integration-aws/basic.tfstate"
+  backend "s3" {
+    bucket = "jackbazbackend"
+    key    = "tests/integration/basicaws.tfstate"
+    region = "eu-west-1"
   }
 
 }
 
-provider "azurerm" {
-  use_oidc = true
-  features {}
-}
+# provider "azurerm" {
+#   use_oidc = true
+#   features {}
+# }
 provider "aws" {
   region = "eu-west-1"
   assume_role_with_web_identity {
