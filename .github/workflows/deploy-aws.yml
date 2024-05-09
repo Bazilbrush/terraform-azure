@@ -27,7 +27,7 @@ jobs:
             backend-platform: aws
             TF_ENV: integration
             AWS_BUCKET: jackbazbackend
-            AWS_BUCKET_KEY: tests/integration/basicaws.tfstate
+            BACKEND_KEY: tests/integration/basicaws.tfstate
             AWS_REGION: "eu-west-1"
             AWS_OIDC_ROLE: 'arn:aws:iam::520686339686:role/github-oidc'
             AWS_OIDC_SESSION_NAME: 'github-test'
